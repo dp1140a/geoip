@@ -1,0 +1,35 @@
+printConfig = false
+
+[logging]
+tracelogging = true
+logfile = "log/geoip.log"
+[logging.http]
+enabled = true
+stdout = true
+fileout = true
+logfile = "log/geoip_http.log"
+
+[http]
+port = "8081"
+host = "localhost"
+useHttps = false
+tlsMinVersion = "1.2"
+httpTLSStrictCiphers = false
+tlsCert = "etc/example.crt"
+tlsKey = "etc/example.key"
+enableCORS = true
+jwtSecret = "There is a mouse in my house"
+
+[geoip]
+geoDB = "GeoIP2-city.mmdb"
+dbRefreshTime = "1d"
+accountId = "568224"
+DatabaseDirectory = "data"
+DatabaseName = "GeoLite2-City.mmdb"
+LicenseKey = "vITmc9FGEn6DpJgk"
+
+[influxdb]
+url = "http://influxdb.mymobile.local:8086"
+token = "OUXGjVVCL6o2UnlYGRhU3HCM2rwZ3VjPVLPAHnLcl1kFOJI23u0Rp0ASsb9SjPWNSofz4ge_NRZG9s5_IEt3bA=="
+org = "zone21"
+bucket = "kahn"

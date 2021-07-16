@@ -1,0 +1,5 @@
+printConfig = false
+
+[logging]
+tracelogging = true
+logfile = "test.log

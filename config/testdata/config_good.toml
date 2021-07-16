@@ -1,0 +1,9 @@
+printConfig = true
+
+[logging]
+tracelogging = true
+logfile = "test.log"
+
+[geoip]
+geoDB = "data/GeoIP2-City.mmdb"
+dbRefreshTime = "1h"
