@@ -92,7 +92,7 @@ tidy:
 	go mod verify
 	go mod tidy
 	@if ! git diff --quiet; then \
-		echo "'go mod tidy' resulted in changes or working tree is dirty:"; \
+		echo "WARNING:  'go mod tidy' resulted in changes or working tree is dirty. See diff.out for details"; \
 		git --no-pager diff > $(REPORT_DIR)/diff.out; \
 	fi
 	@echo $(DONE) "-- Tidy"
