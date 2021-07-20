@@ -25,6 +25,7 @@ GIT_COMMIT := $(shell git rev-parse HEAD)
 MAKEFLAGS += --no-print-directory
 CMDS := $(shell find "$(CMD_DIR)/" -mindepth 1 -maxdepth 1 -type f | sed 's/ /\\ /g' | xargs -n1 basename)
 
+
 GOBIN = $(shell go env GOPATH)/bin
 ARCHES ?= amd64
 OSES ?= linux darwin
@@ -56,8 +57,8 @@ build: deps tidy fmt reports
 	@$(MAKE) deps
 	@echo "  $(M)  Building...\n"
 	@echo "GOBIN: $(GOBIN)"
-	$(GOBIN)/gox -rebuild -gocmd="go" -arch="$(ARCHES)" -os="$(OSES)" -output="$(OUTTPL)/{{.Dir}}" \
-		-tags "$(BUILD_TAGS)" -ldflags "$(LDFLAGS)"
+	$(GOBIN)/gox -arch="$(ARCHES)" -os="$(OSES)" -output="$(OUTTPL)/{{.Dir}}" \
+      	-tags "$(BUILD_TAGS)" -ldflags "$(LDFLAGS)"
 	$(info "Built version:$(VERSION), build:$(GIT_COMMIT)")
 	@echo $(DONE) "-- Build"
 
@@ -72,17 +73,6 @@ dist: clean build
 	cd "$(DIST_DIR)"; find . -maxdepth 1 -type f -printf "$(SHACMD) %P | tee \"./%P.sha\"\n" | sh
 	$(info "Built v$(VERSION), build $(COMMIT_ID)")
 	@echo $(DONE) "-- Dist"
-
-## docker: Builds a docker image
-.PHONY: docker
-docker:
-	docker build --build-arg="$(APP_NAME)" \
-	--build-arg GIT_COMMIT="$(GIT_COMMIT)" \
-	--build-arg GIT_BRANCH="$(GIT_BRANCH)" \
-	--build-arg VERSION="$(VERSION)" \
-	--build-arg GOOS="$(GOOS)" \
-	-t fofx/fofx:$(VERSION) . -f Dockerfile
-	@echo $(DONE) "-- Docker"
 
 ## tidy: Verifies and downloads all required dependencies
 .PHONY: tidy
@@ -152,15 +142,6 @@ clean:
 	rm -rf $(DIST_DIR)
 	rm -rf $(REPORT_DIR)
 	@echo $(DONE) "-- Clean"
-
-## cleanDocker: Clean build files. Runs `go clean` internally
-.PHONY: cleanDocker
-cleanDocker:
-	@echo "$(M)  🧹 Cleaning docker build ..."
-	#docker stop $(APP_NAME)
-	$(shell docker rm $(APP_NAME) 2>/dev/null)
-	$(shell docker rmi $$(docker images -f "dangling=true" -q) 2>/dev/null)
-	@echo $(DONE) "-- Clean Docker"
 
 ## gencerts: Generates a sample self signed cert and key to enable TLS
 .PHONY: gencerts

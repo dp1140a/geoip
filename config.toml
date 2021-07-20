@@ -1,4 +1,4 @@
-printConfig = false
+printConfig = true
 
 [logging]
 tracelogging = true

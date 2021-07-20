@@ -15,8 +15,6 @@ import (
 	"strings"
 )
 
-var ConfigFile string
-
 const (
 	_PRINT_CONFIG = "printConfig"
 )
@@ -26,14 +24,14 @@ Initialize Config via Viper.
 Read in Config File
 Set Defaults
 */
-func InitConfig() (err error) {
+func InitConfig(configFile string) (err error) {
 	//Get Current Working Directory so we know where we are
 	dir, _ := os.Getwd()
 	log.Info("Current Working Directory is: ", dir)
 
 	//Set the config File
-	if ConfigFile != "" {
-		viper.SetConfigFile(ConfigFile)
+	if configFile != "" {
+		viper.SetConfigFile(configFile)
 	} else {
 		viper.SetConfigName("config")
 		viper.AddConfigPath(".")                          // Local dir
@@ -52,6 +50,10 @@ func InitConfig() (err error) {
 		} else if e, ok := err.(viper.ConfigParseError); ok {
 			//Config Parsing Error
 			log.Errorf("error parsing config file: %v", e)
+			return err
+		} else if e, ok := err.(viper.UnsupportedConfigError); ok {
+			//Config Parsing Error
+			log.Errorf("upsupported config type: %v", e)
 			return err
 		} else {
 			// Other Error

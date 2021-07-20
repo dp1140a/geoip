@@ -12,6 +12,8 @@ import (
 	"sync"
 )
 
+var ConfigLocation string
+
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
@@ -19,7 +21,10 @@ var serveCmd = &cobra.Command{
 	Long:  `Starts a http server and serves the configured api`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		//cobra.OnInitialize(config.InitConfig, logging.InitLogger)
-		err := config.InitConfig()
+		if ConfigLocation != "" {
+			log.Infof("Config flag set to %v", ConfigLocation)
+		}
+		err := config.InitConfig(ConfigLocation)
 		if err != nil {
 			log.Fatal("unable to configure. shutting down.")
 		}
@@ -31,17 +36,18 @@ var serveCmd = &cobra.Command{
 			cancel()
 		}
 
+		// Setup clean shutdown on ^C
 		go func() {
 			ch := make(chan os.Signal, 1)
 			signal.Notify(ch, os.Interrupt)
 			sig := <-ch
 			log.Warn("Signal caught. Shutting down... Reason: ", sig)
 			cancel()
-
 		}()
 
 		var wg sync.WaitGroup
 
+		//Go Run It
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
@@ -57,4 +63,5 @@ var serveCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(serveCmd)
+	serveCmd.Flags().StringVarP(&ConfigLocation, "config", "c", "", "location of the config file to use")
 }
