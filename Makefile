@@ -138,7 +138,7 @@ clean:
 	@echo "$(M)  🧹 Cleaning build ..."
 	go clean $(PKG) || true
 	rm -rf $(BUILD_DIR)
-	rm -rf $(DIST_DIR)
+	rm -rf $(DIST_DIR)/*
 	rm -rf $(REPORT_DIR)
 	@echo $(DONE) "-- Clean"
 
