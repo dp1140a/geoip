@@ -1,27 +1,17 @@
 package api
 
 import (
+	"fmt"
 	"github.com/dp1140a/geoip/api/httplogging"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 const (
-	_HTTP = "http"
+	_HTTP   = "http"
+	SSL_DIR = "/etc/ssl"
 )
 
-/**
-[http]
-    port = "8081"
-    host = "localhost"
-    useHttps = false
-    tlsMinVersion = "1.2"
-    httpTLSStrictCiphers = false
-    tlsCert = "config/d5-test.crt"
-    tlsKey = "config/d5-test.key"
-    enableCORS = true
-    jwtSecret="There is a mouse in my house"
-*/
 type Config struct {
 	Hostname             string
 	Port                 string
@@ -42,8 +32,8 @@ func InitConfig() (config *Config, err error) {
 		UseHttps:             false,
 		TLSMinVersion:        "1.2",
 		HttpTLSStrictCiphers: false,
-		TLSCert:              "config/d5-test.crt",
-		TLSKey:               "config/d5-test.key",
+		TLSCert:              fmt.Sprintf("%v/geoip.crt", SSL_DIR),
+		TLSKey:               fmt.Sprintf("%v/geoip.key", SSL_DIR),
 		EnableCORS:           false,
 		JWTSecret:            "There is a mouse in my house",
 		LoggingConfig:        httplogging.InitConfig(),
@@ -67,8 +57,8 @@ func String() string {
     useHttps = false
     tlsMinVersion = "1.2"
     httpTLSStrictCiphers = false
-    tlsCert = "config/d5-test.crt"
-    tlsKey = "config/d5-test.key"
+    tlsCert = "/etc/ssl/geoip.crt"
+    tlsKey = "/etc/ssl/geoip.key"
     enableCORS = true
     jwtSecret="There is a mouse in my house"
 `

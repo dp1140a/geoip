@@ -21,7 +21,6 @@ enableCORS = true
 jwtSecret = "There is a mouse in my house"
 
 [geoip]
-geoDB = "GeoIP2-city.mmdb"
 dbRefreshTime = "1d"
 accountId = "568224"
 DatabaseDirectory = "/var/lib/geoip"

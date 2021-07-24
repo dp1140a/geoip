@@ -7,7 +7,10 @@ import (
 )
 
 const (
-	_GEO = "geoip"
+	_GEO     = "geoip"
+	DATA_DIR = "/var/lib/geoip"
+	DB_NAME  = "GeoLite2-City.mmdb"
+	EDITION  = "GeoLite2-City"
 )
 
 type Config struct {
@@ -25,9 +28,9 @@ func InitConfig() (config *Config, err error) {
 
 	config = &Config{
 		AccountId:         123,
-		DatabaseDirectory: "/usr/share/GeoIP",
-		DatabaseName:      "GeoLite2-City.mmdb",
-		EditionIDs:        []string{"GeoLite2-City"},
+		DatabaseDirectory: DATA_DIR,
+		DatabaseName:      DB_NAME,
+		EditionIDs:        []string{EDITION},
 		LicenseKey:        "testing",
 		RefreshDuration:   dbrt,
 		Verbose:           false,
@@ -46,10 +49,9 @@ func InitConfig() (config *Config, err error) {
 func String() string {
 	return `
 [geoip]
-    geoDB="GeoIP2-city.mmdb"
     dbRefreshTime="1h"
-    accountId="YOURACCTNUMBER"
-    DatabaseDirectory="data"
+    accountId=1234
+    DatabaseDirectory="/var/lib/geoip"
     DatabaseName="GeoLite2-City.mmdb"
     LicenseKey="YOURLICENSEKEY"
 `

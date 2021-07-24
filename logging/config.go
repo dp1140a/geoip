@@ -2,53 +2,44 @@ package logging
 
 import (
 	"fmt"
-	"github.com/dp1140a/geoip/version"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 const (
-	_LOGGING       = "logging"
-	_TRACE_LOGGING = "tracelogging"
-	_LOG_FILE      = "logfile"
+	_LOGGING = "logging"
+	LOG_FILE = "geoip.log"
+	LOG_DIR  = "/var/log/geoip"
 )
 
-/**
-  tracelogging = true
-  logfile="log/d5.log"
-*/
 type Config struct {
 	TraceLogging bool
 	LogFile      string
 }
 
-func InitConfig() (config *Config, err error) {
-	l := viper.Sub(_LOGGING)
-	fmt.Println("App_name: " + version.APP_NAME)
-	if l == nil {
-		config = &Config{
-			TraceLogging: false,
-			LogFile:      "./log/" + version.APP_NAME + ".log",
-		}
-		return config, err
-	} else {
-		setViperDefaults()
-		config = &Config{}
-		config.TraceLogging = l.GetBool(_TRACE_LOGGING)
-		config.LogFile = l.GetString(_LOG_FILE)
-		return config, err
+func InitConfig() (config *Config) {
+	config = &Config{
+		TraceLogging: false,
+		LogFile:      fmt.Sprintf("%v/%v.log", LOG_DIR, LOG_FILE),
 	}
-}
 
-func setViperDefaults() {
-	lv := viper.Sub(_LOGGING)
-	lv.SetDefault(_TRACE_LOGGING, false)
-	lv.SetDefault(_LOG_FILE, "./log/"+version.APP_NAME+".log")
+	l := viper.Sub(_LOGGING)
+	if l != nil {
+		err := l.Unmarshal(config)
+		if err != nil {
+			log.Error("Logging Config Error: ", err.Error())
+			return config
+		}
+	}
+
+	return config
+
 }
 
 func String() string {
 	return `
 [logging]
     tracelogging = true
-    logfile="log/geoip.log"
+    logfile="/var/log/geoip/geoip.log"
 `
 }

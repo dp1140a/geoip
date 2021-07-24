@@ -1,22 +1,17 @@
 package httplogging
 
 import (
-	"github.com/dp1140a/geoip/version"
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 const (
 	LOGGING_HTTP = "logging.http"
-	_LOG_FILE    = "logfile"
+	LOG_DIR      = "/var/log/geoip"
+	HTTP_LOG     = "geoip_http.log"
 )
 
-/**
-  		enabled=true
-        stdout=true
-        file=true
-        logfile="log/d5_http.log"
-*/
 type HttpLoggingConfig struct {
 	Enabled bool
 	StdOut  bool
@@ -29,7 +24,7 @@ func InitConfig() (config *HttpLoggingConfig) {
 		Enabled: true,
 		StdOut:  true,
 		FileOut: false,
-		LogFile: "./log/" + version.APP_NAME + ".log",
+		LogFile: fmt.Sprintf("%v/%v.log", LOG_DIR, HTTP_LOG),
 	}
 
 	h := viper.Sub(LOGGING_HTTP)
@@ -49,6 +44,6 @@ func String() string {
         enabled=true
         stdout=true
         fileout=true
-        logfile="log/geoip_http.log"
+        logfile="/var/log/geoip/geoip_http.log"
 `
 }
