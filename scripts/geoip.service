@@ -5,7 +5,7 @@ After=network.target
 [Service]
 EnvironmentFile=-/etc/default/geoip
 User=geoip
-ExecStart=/usr/bin/geoip -config /etc/geoip/geoip.toml $GEOIP_OPTS
+ExecStart=/usr/bin/geoip serve -c $CONF_FILE
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
 RestartForceExitStatus=SIGPIPE
