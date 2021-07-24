@@ -6,6 +6,7 @@ import (
 	"github.com/dp1140a/geoip/api"
 	"github.com/dp1140a/geoip/api/geo"
 	"github.com/dp1140a/geoip/api/httplogging"
+	"github.com/dp1140a/geoip/api/influx"
 	"github.com/dp1140a/geoip/logging"
 	"github.com/dp1140a/geoip/version"
 	"github.com/fsnotify/fsnotify"
@@ -107,6 +108,7 @@ func Generate() {
 	builder.WriteString(httplogging.String())
 	builder.WriteString(api.String())
 	builder.WriteString(geo.String())
+	builder.WriteString(influx.String())
 
 	// Convert Builder to String and print it.
 	result := builder.String()

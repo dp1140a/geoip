@@ -1,0 +1,15 @@
+[Unit]
+Description=A Geographic IP lookup service powered by Mastermind
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/default/geoip
+User=geoip
+ExecStart=/usr/bin/geoip -config /etc/geoip/geoip.toml $GEOIP_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartForceExitStatus=SIGPIPE
+KillMode=control-group
+
+[Install]
+WantedBy=multi-user.target

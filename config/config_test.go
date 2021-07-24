@@ -17,30 +17,27 @@ func (ts *ConfigTestSuite) SetupSuite() {}
 func (ts *ConfigTestSuite) TearDownSuite() {}
 
 func (ts *ConfigTestSuite) SetupTest() {
-	ConfigFile = ""
 }
 
 func (ts *ConfigTestSuite) TearDownTest() {}
 
 //With File
 func (ts *ConfigTestSuite) TestGoodConfigFile() {
-	ConfigFile = "./testdata/config_good.toml"
-	err := InitConfig()
+	err := InitConfig("./testdata/config_good.toml")
 	assert.NoError(ts.T(), err)
 	assert.NotEmpty(ts.T(), viper.AllKeys())
 }
 
 //With no file
 func (ts *ConfigTestSuite) TestNoConfigFile() {
-	err := InitConfig()
+	err := InitConfig("")
 	assert.NoError(ts.T(), err)
 	assert.NotEmpty(ts.T(), viper.AllKeys())
 }
 
 //With Bad File
 func (ts *ConfigTestSuite) TestBadConfigFile() {
-	ConfigFile = "./testdata/config_bad.toml"
-	err := InitConfig()
+	err := InitConfig("./testdata/config_bad.toml")
 	assert.Error(ts.T(), err)
 	assert.Contains(ts.T(), err.Error(), "While parsing config")
 }
@@ -49,7 +46,7 @@ func (ts *ConfigTestSuite) TestBadConfigFile() {
 func (ts *ConfigTestSuite) TestEnvVarsConfig() {
 	expected := "BAR"
 	os.Setenv("GEOIP_FOO", expected)
-	err := InitConfig()
+	err := InitConfig("")
 	got := viper.GetString("foo")
 	assert.NoError(ts.T(), err)
 	assert.Equal(ts.T(), expected, got)
@@ -57,7 +54,7 @@ func (ts *ConfigTestSuite) TestEnvVarsConfig() {
 
 //Print Config
 func (ts *ConfigTestSuite) TestPrintConfig() {
-	err := InitConfig()
+	err := InitConfig("")
 	assert.NoError(ts.T(), err)
 	PrintConfig()
 }

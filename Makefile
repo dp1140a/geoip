@@ -23,8 +23,6 @@ GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 GIT_COMMIT := $(shell git rev-parse HEAD)
 
 MAKEFLAGS += --no-print-directory
-CMDS := $(shell find "$(CMD_DIR)/" -mindepth 1 -maxdepth 1 -type f | sed 's/ /\\ /g' | xargs -n1 basename)
-
 
 GOBIN = $(shell go env GOPATH)/bin
 ARCHES ?= amd64
@@ -50,7 +48,7 @@ deps:
 
 ## build: Install missing dependencies. Builds binary in ./build
 .PHONY: build
-build: deps tidy fmt reports
+build: deps tidy fmt
 	@mkdir -pv $(BUILD_DIR)
 	@echo "$(LDFLAGS)"
 	@echo "  $(M)  Checking if there is any missing dependencies...\n"
@@ -64,10 +62,11 @@ build: deps tidy fmt reports
 
 ## Creates a distribution
 .PHONY: dist
-dist: clean build
+dist: clean reports build
 	cd "$(DIST_DIR)"; for dir in ./**; do \
-		cp $(PKG_DIR)/config.toml $$dir; \
-		cp -r $(PKG_DIR)/etc $$dir; \
+		#cp $(PKG_DIR)/config.toml $$dir; \
+		#cp -r $(PKG_DIR)/etc $$dir; \
+		cp $(PKG_DIR)/scripts/* $$dir;\
 		$(GZCMD) "$(basename "$$dir").tar.gz" "$$dir"; \
 	done
 	cd "$(DIST_DIR)"; find . -maxdepth 1 -type f -printf "$(SHACMD) %P | tee \"./%P.sha\"\n" | sh
@@ -170,10 +169,12 @@ debug:
 	$(info DIST_DIR=$(DIST_DIR))
 	$(info LOG_DIR=$(LOG_DIR))
 	$(info REPORT_DIR=$(REPORT_DIR))
+	$(info VET_RPT=$(VET_RPT))
+	$(info COVERAGE_RPT=$(COVERAGE_RPT))
 	$(info VERSION=$(VERSION))
 	$(info GIT_COMMIT=$(GIT_COMMIT))
 	$(info GIT_TAG=$(GIT_TAG))
-	$(info CMDS=$(CMDS))
+	$(info GOBIN=$(GOBIN))
 	$(info ARCHES=$(ARCHES))
 	$(info OSES=$(OSES))
 	$(info LDFLAGS=$(LDFLAGS))
