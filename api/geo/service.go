@@ -38,7 +38,8 @@ func NewGeoIPService(ctx context.Context) (geoService models.Service) {
 	log.Info("Initializing Service ", SERVICE_NAME)
 	config, err := InitConfig()
 	if err != nil {
-		log.Error("NewGeoIPService Config error: ", err)
+		log.Errorf("NewGeoIPService Config error: %v \n EXITING", err)
+		os.Exit(-1)
 	}
 	updater := update.NewGeoIPUpdater(mapConfig(config))
 
