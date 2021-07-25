@@ -93,7 +93,7 @@ func PrintConfig() {
 		return
 	}
 
-	fmt.Print(string(cJSON))
+	log.Info(string(cJSON))
 }
 
 func String() string {

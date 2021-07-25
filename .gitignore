@@ -26,3 +26,4 @@ config/*.json
 *orig
 .idea/*
 .idea/modules.xml
+/api/geo/geo.json

@@ -21,9 +21,9 @@ enableCORS = true
 jwtSecret = "There is a mouse in my house"
 
 [geoip]
-dbRefreshTime = "1d"
+RefreshDuration = "1d"
 accountId = "568224"
-DatabaseDirectory = "/var/lib/geoip"
+DatabaseDirectory = "data/geoip"
 DatabaseName = "GeoLite2-City.mmdb"
 LicenseKey = "vITmc9FGEn6DpJgk"
 

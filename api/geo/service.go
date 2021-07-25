@@ -43,12 +43,22 @@ func NewGeoIPService(ctx context.Context) (geoService models.Service) {
 	}
 	updater := update.NewGeoIPUpdater(mapConfig(config))
 
+	//Check data dir exists.  if not create
+	if _, err := os.Stat(config.DatabaseDirectory); os.IsNotExist(err) {
+		err = os.MkdirAll(config.DatabaseDirectory, os.ModePerm)
+		if err != nil {
+			log.Errorf("Cannot create data dir. %v Shutting down", err)
+			os.Exit(1)
+		}
+	}
+
 	db, err := openDB(filepath.Join(config.DatabaseDirectory, config.DatabaseName))
+
 	if err != nil {
 		log.Warn("No Geo DB found. Fetching")
 		err = updater.Update()
 		if err != nil {
-			log.Error("Cannot retrieve Geo DB.  Shutting down")
+			log.Errorf("Cannot retrieve Geo DB. %v Shutting down", err)
 			os.Exit(1)
 		}
 		db, _ = openDB(filepath.Join(config.DatabaseDirectory, config.DatabaseName))
@@ -83,13 +93,15 @@ func NewGeoIPService(ctx context.Context) (geoService models.Service) {
 				if err != nil {
 					log.Error(err)
 				}
+			/**	Enable for manual debugging
 			case userAnswer := <-userInput:
 				log.Info(userAnswer)
+
 				err := updater.Update()
 				if err != nil {
 					log.Error(err)
 				}
-
+			**/
 			case <-ctx.Done():
 				log.Warn("Stopping updater.")
 				gs.shutdown()

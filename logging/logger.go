@@ -12,10 +12,7 @@ import (
 )
 
 func InitLogger() {
-	config, err := InitConfig()
-	if err != nil {
-		log.Error("Logging config error: ", err)
-	}
+	config := InitConfig()
 	var logLevel = log.InfoLevel
 	if config.TraceLogging == true {
 		logLevel = log.TraceLevel
