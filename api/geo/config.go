@@ -8,9 +8,10 @@ import (
 
 const (
 	_GEO     = "geoip"
-	DATA_DIR = "/var/lib/geoip"
+	DATA_DIR = "data/geoip"
 	DB_NAME  = "GeoLite2-City.mmdb"
 	EDITION  = "GeoLite2-City"
+	DBRT     = "1d"
 )
 
 type Config struct {
@@ -49,9 +50,9 @@ func InitConfig() (config *Config, err error) {
 func String() string {
 	return `
 [geoip]
-    dbRefreshTime="1h"
+    RefreshDuration="1d"
     accountId=1234
-    DatabaseDirectory="/var/lib/geoip"
+    DatabaseDirectory="data/geoip"
     DatabaseName="GeoLite2-City.mmdb"
     LicenseKey="YOURLICENSEKEY"
 `
