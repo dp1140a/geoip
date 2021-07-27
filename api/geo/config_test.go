@@ -21,7 +21,7 @@ func (ts *ConfigTestSuite) TearDownTest() {}
 
 //With no file
 func (ts *ConfigTestSuite) TestNoConfigFile() {
-	config, err := InitConfig()
+	config, err := InitGeoIpConfig()
 	fmt.Println(config.RefreshDuration.String())
 	assert.NoError(ts.T(), err)
 	assert.NotEmpty(ts.T(), config)
