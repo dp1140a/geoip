@@ -22,13 +22,13 @@ jwtSecret = "There is a mouse in my house"
 
 [geoip]
 RefreshDuration = "24h" #Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
-accountId = "568224"
+accountId = ""
 DatabaseDirectory = "data/geoip"
 DatabaseName = "GeoLite2-City.mmdb"
-LicenseKey = "vITmc9FGEn6DpJgk"
+LicenseKey = ""
 
 [influxdb]
 url = "http://influxdb.mymobile.local:8086"
-token = "OUXGjVVCL6o2UnlYGRhU3HCM2rwZ3VjPVLPAHnLcl1kFOJI23u0Rp0ASsb9SjPWNSofz4ge_NRZG9s5_IEt3bA=="
-org = "zone21"
-bucket = "kahn"
+token = ""
+org = ""
+bucket = ""
