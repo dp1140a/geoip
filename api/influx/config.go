@@ -7,21 +7,25 @@ import (
 
 const (
 	_INFLUX = "influxdb"
+	DB_URL  = "http://localhost:8086"
+	TOKEN   = "mytoken"
+	ORG     = "myOrg"
+	BUCKET  = "myBucket"
 )
 
-type Config struct {
+type InfluxDBConfig struct {
 	Url    string
 	Token  string
 	Org    string
 	Bucket string
 }
 
-func InitConfig() (config *Config, err error) {
-	config = &Config{
-		Url:    "http://localhost:8086",
-		Token:  "myToken",
-		Org:    "myOrg",
-		Bucket: "myBucket",
+func InitInfluxDBConfig() (config *InfluxDBConfig, err error) {
+	config = &InfluxDBConfig{
+		Url:    DB_URL,
+		Token:  TOKEN,
+		Org:    ORG,
+		Bucket: BUCKET,
 	}
 
 	h := viper.Sub(_INFLUX)
@@ -38,9 +42,9 @@ func InitConfig() (config *Config, err error) {
 func String() string {
 	return `
 [influxdb]
-	url="http://localhost:8086"
-	token="myToken"
-	org="myOrg"
-	bucket="myBucket"
+    url = "` + DB_URL + `"
+    token = "` + TOKEN + `"
+    org = "` + ORG + `"
+    bucket = "` + BUCKET + `"
 `
 }

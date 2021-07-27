@@ -21,7 +21,7 @@ enableCORS = true
 jwtSecret = "There is a mouse in my house"
 
 [geoip]
-RefreshDuration = "1d"
+RefreshDuration = "24h" #Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
 accountId = "568224"
 DatabaseDirectory = "data/geoip"
 DatabaseName = "GeoLite2-City.mmdb"

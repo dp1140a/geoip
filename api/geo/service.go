@@ -28,7 +28,7 @@ const (
 
 type GeoIPService struct {
 	name           string
-	Config         *Config
+	Config         *GeoIpConfig
 	database       *geoip2.Reader
 	Updater        *update.GeoIpUpdater
 	InfluxDbWriter *influxwriter.InfluxDbWriter
@@ -36,7 +36,7 @@ type GeoIPService struct {
 
 func NewGeoIPService(ctx context.Context) (geoService models.Service) {
 	log.Info("Initializing Service ", SERVICE_NAME)
-	config, err := InitConfig()
+	config, err := InitGeoIpConfig()
 	if err != nil {
 		log.Errorf("NewGeoIPService Config error: %v \n EXITING", err)
 		os.Exit(-1)
@@ -134,13 +134,13 @@ func (gs GeoIPService) shutdown() {
 	gs.database.Close()
 }
 
-func mapConfig(config *Config) (gconfig *geoipupdate.Config) {
+func mapConfig(config *GeoIpConfig) (gconfig *geoipupdate.Config) {
 	return &geoipupdate.Config{
 		AccountID:         config.AccountId,
 		DatabaseDirectory: config.DatabaseDirectory,
 		LicenseKey:        config.LicenseKey,
 		EditionIDs:        config.EditionIDs,
-		Verbose:           config.Verbose,
+		Verbose:           config.VerboseUpdate,
 	}
 }
 

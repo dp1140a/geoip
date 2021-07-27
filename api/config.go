@@ -8,11 +8,18 @@ import (
 )
 
 const (
-	_HTTP   = "http"
-	SSL_DIR = "/etc/ssl"
+	_HTTP         = "http"
+	SSL_DIR       = "/etc/ssl"
+	JWT_SECRET    = "There is a mouse in my house"
+	HOST          = "localhost"
+	PORT          = "8081"
+	USEHTTPS      = false
+	TLSMINVERSION = "1.2"
+	STRICTCIPHERS = false
+	ENABLECORS    = false
 )
 
-type Config struct {
+type ServerConfig struct {
 	Hostname             string
 	Port                 string
 	UseHttps             bool
@@ -25,24 +32,24 @@ type Config struct {
 	LoggingConfig        *httplogging.HttpLoggingConfig //api/logging/config
 }
 
-func InitConfig() (config *Config, err error) {
-	config = &Config{
-		Hostname:             "0.0.0.0",
-		Port:                 "8081",
+func InitServerConfig() (config *ServerConfig, err error) {
+	config = &ServerConfig{
+		Hostname:             HOST,
+		Port:                 PORT,
 		UseHttps:             false,
-		TLSMinVersion:        "1.2",
-		HttpTLSStrictCiphers: false,
+		TLSMinVersion:        TLSMINVERSION,
+		HttpTLSStrictCiphers: STRICTCIPHERS,
 		TLSCert:              fmt.Sprintf("%v/geoip.crt", SSL_DIR),
 		TLSKey:               fmt.Sprintf("%v/geoip.key", SSL_DIR),
-		EnableCORS:           false,
-		JWTSecret:            "There is a mouse in my house",
-		LoggingConfig:        httplogging.InitConfig(),
+		EnableCORS:           ENABLECORS,
+		JWTSecret:            JWT_SECRET,
+		LoggingConfig:        httplogging.InitHttpLoggingConfig(),
 	}
 	h := viper.Sub(_HTTP)
 	if h != nil {
 		err := h.Unmarshal(config)
 		if err != nil {
-			log.Error("HTTP Config Error: ", err.Error())
+			log.Panic("Exiting! Server Config Error: ", err.Error())
 			return nil, err
 		}
 	}
@@ -52,14 +59,14 @@ func InitConfig() (config *Config, err error) {
 func String() string {
 	return `
 [http]
-    port = "8081"
-    host = "localhost"
-    useHttps = false
-    tlsMinVersion = "1.2"
-    httpTLSStrictCiphers = false
-    tlsCert = "/etc/ssl/geoip.crt"
-    tlsKey = "/etc/ssl/geoip.key"
-    enableCORS = true
-    jwtSecret="There is a mouse in my house"
+    host = "` + HOST + `"
+    port = "` + PORT + `"
+    useHttps = ` + fmt.Sprintf("%t", USEHTTPS) + `
+    tlsMinVersion = "` + TLSMINVERSION + `"
+    httpTLSStrictCiphers = ` + fmt.Sprintf("%t", STRICTCIPHERS) + `
+    tlsCert = "` + fmt.Sprintf("%v/geoip.crt", SSL_DIR) + `"
+    tlsKey = "` + fmt.Sprintf("%v/geoip.key", SSL_DIR) + `"
+    enableCORS = ` + fmt.Sprintf("%t", ENABLECORS) + `
+    jwtSecret = "` + JWT_SECRET + `"
 `
 }

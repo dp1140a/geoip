@@ -7,19 +7,20 @@ import (
 )
 
 const (
-	_LOGGING = "logging"
-	LOG_FILE = "geoip.log"
-	LOG_DIR  = "/var/log/geoip"
+	_LOGGING     = "logging"
+	LOG_FILE     = "geoip.log"
+	LOG_DIR      = "/var/log/geoip"
+	TRACELOGGING = true
 )
 
-type Config struct {
+type LoggingConfig struct {
 	TraceLogging bool
 	LogFile      string
 }
 
-func InitConfig() (config *Config) {
-	config = &Config{
-		TraceLogging: false,
+func InitLoggingConfig() (config *LoggingConfig) {
+	config = &LoggingConfig{
+		TraceLogging: TRACELOGGING,
 		LogFile:      fmt.Sprintf("%v/%v.log", LOG_DIR, LOG_FILE),
 	}
 
@@ -39,7 +40,7 @@ func InitConfig() (config *Config) {
 func String() string {
 	return `
 [logging]
-    tracelogging = true
-    logfile="/var/log/geoip/geoip.log"
+    tracelogging = ` + fmt.Sprintf("%t", TRACELOGGING) + `
+    logfile = "` + fmt.Sprintf("%s/%s", LOG_DIR, LOG_FILE) + `"
 `
 }

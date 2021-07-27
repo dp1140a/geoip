@@ -20,7 +20,7 @@ import (
 var tokenAuth *jwtauth.JWTAuth
 
 type Server struct {
-	Config   *Config
+	Config   *ServerConfig
 	Logger   *log.Logger
 	Context  context.Context
 	Router   *chi.Mux
@@ -34,7 +34,7 @@ func init() {
 }
 
 func NewServer(ctx context.Context) (s *Server, err error) {
-	config, err := InitConfig()
+	config, err := InitServerConfig()
 	s = &Server{
 		Config:  config,
 		Logger:  log.New(),
