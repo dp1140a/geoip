@@ -1,40 +1,44 @@
 package geo
 
 import (
+	"fmt"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"time"
 )
 
 const (
-	_GEO     = "geoip"
-	DATA_DIR = "data/geoip"
-	DB_NAME  = "GeoLite2-City.mmdb"
-	EDITION  = "GeoLite2-City"
-	DBRT     = "1d"
+	_GEO           = "geoip"
+	DATA_DIR       = "data/geoip"
+	DB_NAME        = "GeoLite2-City.mmdb"
+	EDITION        = "GeoLite2-City"
+	DBREFRESH      = "24h"
+	VERBOSE_UPDATE = false
+	LICENSE_KEY    = "testing"
+	ACCOUNT_ID     = 123
 )
 
-type Config struct {
+type GeoIpConfig struct {
 	AccountId         int
 	DatabaseDirectory string
 	DatabaseName      string
 	EditionIDs        []string
 	LicenseKey        string
 	RefreshDuration   time.Duration
-	Verbose           bool
+	VerboseUpdate     bool
 }
 
-func InitConfig() (config *Config, err error) {
-	dbrt, _ := time.ParseDuration("1h")
+func InitGeoIpConfig() (config *GeoIpConfig, err error) {
+	dbrt, _ := time.ParseDuration(DBREFRESH)
 
-	config = &Config{
-		AccountId:         123,
+	config = &GeoIpConfig{
+		AccountId:         ACCOUNT_ID,
 		DatabaseDirectory: DATA_DIR,
 		DatabaseName:      DB_NAME,
 		EditionIDs:        []string{EDITION},
-		LicenseKey:        "testing",
+		LicenseKey:        LICENSE_KEY,
 		RefreshDuration:   dbrt,
-		Verbose:           false,
+		VerboseUpdate:     VERBOSE_UPDATE,
 	}
 	h := viper.Sub(_GEO)
 	if h != nil {
@@ -50,10 +54,11 @@ func InitConfig() (config *Config, err error) {
 func String() string {
 	return `
 [geoip]
-    RefreshDuration="1d"
-    accountId=1234
-    DatabaseDirectory="data/geoip"
-    DatabaseName="GeoLite2-City.mmdb"
-    LicenseKey="YOURLICENSEKEY"
+    RefreshDuration = "` + DBREFRESH + `"
+    accountId = ` + fmt.Sprintf("%d", ACCOUNT_ID) + `
+    DatabaseDirectory = "` + DATA_DIR + `"
+    DatabaseName = "` + DB_NAME + `"
+    LicenseKey = "` + LICENSE_KEY + `"
+    Verbose = ` + fmt.Sprintf("%t", VERBOSE_UPDATE) + `
 `
 }
