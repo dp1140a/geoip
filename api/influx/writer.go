@@ -20,7 +20,7 @@ type InfluxDbWriter struct {
 
 func NewInfluxDBWriter() (influxWriter *InfluxDbWriter, err error) {
 	log.Info("Initializing Service ", SERVICE_NAME)
-	config, err := InitConfig()
+	config, err := InitInfluxDBConfig()
 	if err != nil {
 		log.Error("NewGeoIPService Config error: ", err)
 	}

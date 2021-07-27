@@ -10,6 +10,9 @@ const (
 	LOGGING_HTTP = "logging.http"
 	LOG_DIR      = "/var/log/geoip"
 	HTTP_LOG     = "geoip_http.log"
+	ENABLED      = true
+	STDOUT       = true
+	FILEOUT      = false
 )
 
 type HttpLoggingConfig struct {
@@ -19,11 +22,11 @@ type HttpLoggingConfig struct {
 	LogFile string
 }
 
-func InitConfig() (config *HttpLoggingConfig) {
+func InitHttpLoggingConfig() (config *HttpLoggingConfig) {
 	config = &HttpLoggingConfig{
-		Enabled: true,
-		StdOut:  true,
-		FileOut: false,
+		Enabled: ENABLED,
+		StdOut:  STDOUT,
+		FileOut: FILEOUT,
 		LogFile: fmt.Sprintf("%v/%v.log", LOG_DIR, HTTP_LOG),
 	}
 
@@ -41,9 +44,9 @@ func InitConfig() (config *HttpLoggingConfig) {
 
 func String() string {
 	return `    [logging.http]
-        enabled=true
-        stdout=true
-        fileout=true
-        logfile="/var/log/geoip/geoip_http.log"
+        enabled = ` + fmt.Sprintf("%t", ENABLED) + `
+        stdout = ` + fmt.Sprintf("%t", STDOUT) + `
+        fileout = ` + fmt.Sprintf("%t", FILEOUT) + `
+        logfile = "` + fmt.Sprintf("%s/%s", LOG_DIR, HTTP_LOG) + `"
 `
 }

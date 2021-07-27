@@ -5,14 +5,15 @@ import (
 	log "github.com/sirupsen/logrus"
 	"io"
 	"os"
-	"path"
 	"path/filepath"
+	"regexp"
 	"runtime"
+	"strings"
 	"time"
 )
 
 func InitLogger() {
-	config := InitConfig()
+	config := InitLoggingConfig()
 	var logLevel = log.InfoLevel
 	if config.TraceLogging == true {
 		logLevel = log.TraceLevel
@@ -25,9 +26,11 @@ func InitLogger() {
 		DataKey:           "",
 		FieldMap:          nil,
 		CallerPrettyfier: func(f *runtime.Frame) (string, string) {
-			filename := path.Base(f.File)
-			//r, _ := regexp.Compile("[^.]+$")
-			return "", fmt.Sprintf("%s:%d", filename, f.Line)
+			repopath := fmt.Sprintf("%s/src/github.com/bob", os.Getenv("GOPATH"))
+			filename := strings.Replace(f.File, repopath, "", -1)
+			r, _ := regexp.Compile(`[^\/]+\/[^\/]+$`)
+			daFunc := strings.Split(f.Function, ".")
+			return "", fmt.Sprintf("%s:%d[%s()]", r.Find([]byte(filename)), f.Line, daFunc[len(daFunc)-1])
 		},
 		PrettyPrint: false,
 	})
