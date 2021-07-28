@@ -2,33 +2,34 @@ printConfig = true
 
 [logging]
 tracelogging = true
-logfile = "log/geoip.log"
+logfile = "/var/log/geoip/geoip.log"
 [logging.http]
 enabled = true
 stdout = true
-fileout = true
-logfile = "log/geoip_http.log"
+fileout = false
+logfile = "/var/log/geoip/geoip_http.log"
 
 [http]
-port = "8081"
 host = "localhost"
+port = "8081"
 useHttps = false
 tlsMinVersion = "1.2"
 httpTLSStrictCiphers = false
-tlsCert = "etc/example.crt"
-tlsKey = "etc/example.key"
-enableCORS = true
+tlsCert = "/etc/ssl/geoip.crt"
+tlsKey = "/etc/ssl/geoip.key"
+enableCORS = false
 jwtSecret = "There is a mouse in my house"
 
 [geoip]
-RefreshDuration = "24h" #Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
-accountId = "1234"
+RefreshDuration = "24h"
+accountId = 123
 DatabaseDirectory = "data/geoip"
 DatabaseName = "GeoLite2-City.mmdb"
 LicenseKey = "testing"
+Verbose = false
 
 [influxdb]
 url = "http://localhost:8086"
-token = ""
-org = "zone21"
-bucket = "kahn"
+token = "mytoken"
+org = "myOrg"
+bucket = "myBucket"
