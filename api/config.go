@@ -59,7 +59,7 @@ func InitServerConfig() (config *ServerConfig, err error) {
 func String() string {
 	return `
 [http]
-    host = "` + HOST + `"
+    hostname = "` + HOST + `"
     port = "` + PORT + `"
     useHttps = ` + fmt.Sprintf("%t", USEHTTPS) + `
     tlsMinVersion = "` + TLSMINVERSION + `"
