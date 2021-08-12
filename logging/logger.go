@@ -14,6 +14,7 @@ import (
 
 func InitLogger() {
 	config := InitLoggingConfig()
+	// TODO: Change this to just accept a loglevel (error, warn, info, debug) and set accordingly
 	var logLevel = log.InfoLevel
 	if config.TraceLogging == true {
 		logLevel = log.TraceLevel
