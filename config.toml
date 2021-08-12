@@ -1,24 +1,24 @@
 printConfig = true
 
 [logging]
-tracelogging = true
-logfile = "/var/log/geoip/geoip.log"
-[logging.http]
-enabled = true
-stdout = true
-fileout = false
-logfile = "/var/log/geoip/geoip_http.log"
+    tracelogging = false
+    logfile = "/var/log/geoip/geoip.log"
+    [logging.http]
+        enabled = true
+        stdout = true
+        fileout = false
+        logfile = "/var/log/geoip/geoip_http.log"
 
 [http]
-host = "localhost"
-port = "8081"
-useHttps = false
-tlsMinVersion = "1.2"
-httpTLSStrictCiphers = false
-tlsCert = "/etc/ssl/geoip.crt"
-tlsKey = "/etc/ssl/geoip.key"
-enableCORS = false
-jwtSecret = "There is a mouse in my house"
+    hostname = "0.0.0.0"
+    port = "8082"
+    useHttps = false
+    tlsMinVersion = "1.2"
+    httpTLSStrictCiphers = false
+    tlsCert = "/etc/ssl/geoip.crt"
+    tlsKey = "/etc/ssl/geoip.key"
+    enableCORS = false
+    jwtSecret = "There is a mouse in my house"
 
 [geoip]
 RefreshDuration = "24h"
