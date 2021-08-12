@@ -35,8 +35,8 @@ func NewGeoHandler(ctx context.Context, tokenAuth *jwtauth.JWTAuth) models.Handl
 		{
 			Name:        "getGeoIP",
 			Method:      http.MethodPost,
-			Pattern:     "/lookup",
-			HandlerFunc: gh.lookupLogEntries,
+			Pattern:     "/batch",
+			HandlerFunc: gh.batchLogEntries,
 		},
 	}
 
@@ -56,7 +56,7 @@ func (gh GeoHandler) GetPrefix() string {
 }
 
 /**
-GET /geo/{ipaddress}  (200) -- Returns JSON of GeoLocation
+GET /geo/{ipaddress}  (200, 500) -- Returns JSON of GeoLocation
 */
 func (gh *GeoHandler) locate(w http.ResponseWriter, r *http.Request) {
 	record, err := gh.Service.(GeoIPService).locate(chi.URLParam(r, "ipaddress"))
@@ -72,10 +72,10 @@ func (gh *GeoHandler) locate(w http.ResponseWriter, r *http.Request) {
 }
 
 /**
-POST /geo/lookup [logEntries] (201, 400, 500, 502) -- Looksup GeoIp infor for log entries and forwards to InfluxDb
+POST /geo/lookup [logEntries] (201, 500) -- For a batch of line protocol from tail will perform a geoip lookup and send a new point to InfluxDB
 */
-func (gh *GeoHandler) lookupLogEntries(w http.ResponseWriter, r *http.Request) {
-	//Could receive a block of line protocol lines
+func (gh *GeoHandler) batchLogEntries(w http.ResponseWriter, r *http.Request) {
+	// Receive a block of line protocol lines
 	// tail,host=dyson,path=/home/dave/Desktop/logTest/filter.log data_length="0",offset="0",dest_ip="173.160.205.9",tracker="1521923716",reason="match",program="filterlog",pid="45720",ttl="113",iface="em0",flags="none",ip_ver="4",direction="in",src_port="14553",rule="102",action="block",tos="0x20",src_ip="205.185.117.79",dest_port="22",id="14012",timestamp="Jul  8 16:54:53",length="48" 1625793903302961350
 	b, _ := io.ReadAll(r.Body)
 

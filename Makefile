@@ -60,7 +60,7 @@ build: deps tidy fmt
 	$(info "Built version:$(VERSION), build:$(GIT_COMMIT)")
 	@echo $(DONE) "-- Build"
 
-## Creates a distribution
+## dist: Creates a distribution
 .PHONY: dist
 dist: clean reports build
 	cd "$(DIST_DIR)"; for dir in ./**; do \

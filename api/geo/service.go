@@ -206,9 +206,11 @@ func (gs GeoIPService) mapPointsWithLookup(body []byte) (err error) {
 
 		newPoint := influxdb2.NewPointWithMeasurement(BLOCK_MEASUREMENT).
 			AddTag("iface", fmt.Sprintf("%v", fields["iface"])).
+			AddTag("host", point.Tags().GetString("host")).
 			AddField("dest_ip", fields["dest_ip"]).
 			AddField("dest_port", fields["dest_port"]).
 			AddField("rule", fields["rule"]).
+			AddField("direction", fields["direction"]).
 			AddField("src_ip", fields["src_ip"]).
 			AddField("src_port", fields["src_port"]).
 			AddField("country", location.Country.IsoCode).
